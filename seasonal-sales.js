@@ -7,16 +7,20 @@
     // as soon as you select the season
     // all prices should update to current discount by %
 
-//assign products to var
+//declare global variables
 
+// var for DOM div that will be filled with product information
 var divForItems = document.getElementById("listOfItems");
+// var for future concat string that will hold information
 var itemsToPage = "";
+// var to store parsed product information
 var products;
+// var to store parsed sales information
 var salesData;
 
 
 
-
+// function that will put parsed product information to page and print which department the product is in
 var loadProducts = function () {
   for (var i = 0; i < products.products.length; i++) {
     //assigns appropriate department
@@ -59,21 +63,26 @@ storeCat.addEventListener("load", getSales);
 storeCat.open("GET", "categories.json");
 storeCat.send();
 console.log(storeCat);
+
 //all prices should auto update to reflect discount (trigger by change of option below)
 // write function to update prices
-var changePrice = function (e) {
-
+var changePrice = function () {
   for (var i = 0; i < 3; i++) {
+    //if the product's class matches the currently selected season
     if (document.getElementById("seasons").value === salesData.categories[i].season_discount) {
+      //the currently selected season class
       var currentClass = salesData.categories[i].id;
+      //selects all prices with that class name and creates an array of those paragraphs with the current class
       var whichClass =  document.getElementsByClassName(currentClass);
+      //cycles through all of the paragraphs with the current class and does the following:
       for (var j = 0; j < whichClass.length; j++) {
-        // var seasonProduct = whichClass[j].toString();
+        // gather that price (which is housed inside of a span)
         var price = parseFloat(whichClass[j].getElementsByTagName("span")[0].innerHTML);
-        console.log("price" + price)
+        //applies the discount to the price
         var newPrice = price * (1 - (parseFloat(salesData.categories[i].discount)));
-        console.log("price after discount" + Math.round(newPrice) * 100)/100;
+        //rounds new price to the nearest cent
         newPrice = Math.round(newPrice * 100) / 100;
+        //replaces old price on page with the new price
         whichClass[j].getElementsByTagName("span")[0].innerHTML = newPrice;
       }
     }
@@ -87,17 +96,6 @@ var changePrice = function (e) {
 //clear previous changed content by reloading page before changes
 document.querySelector("select").addEventListener("change", function (e) {
   loadProducts();
+  //loading changed prices
   changePrice();
 });
-
-
-
-// //call function
-// document.querySelector("select").addEventListener("change", function (e) {
-//   //aquire seasons and discounts
-//   var storeCat = new XMLHttpRequest();
-//   storeCat.addEventListener("load", changePrice);
-//   storeCat.open("GET", "categories.json");
-//   storeCat.send();
-//   console.log(storeCat);
-// });
