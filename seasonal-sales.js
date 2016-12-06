@@ -22,6 +22,8 @@ var salesData;
 
 // function that will put parsed product information to page and print which department the product is in
 var loadProducts = function () {
+  //clears previous content
+  itemsToPage= "";
   for (var i = 0; i < products.length; i++) {
     //assigns appropriate department
     if (products[i].category_id === 1) {
