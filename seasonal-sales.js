@@ -91,7 +91,7 @@ var changePrice = function () {
 
 
 
-//Two things happen on change of selection:
+//Two things happen on change of selection of season:
 
 //clear previous changed content by reloading page before changes
 document.querySelector("select").addEventListener("change", function (e) {
