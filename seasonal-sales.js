@@ -22,18 +22,18 @@ var salesData;
 
 // function that will put parsed product information to page and print which department the product is in
 var loadProducts = function () {
-  for (var i = 0; i < products.products.length; i++) {
+  for (var i = 0; i < products.length; i++) {
     //assigns appropriate department
-    if (products.products[i].category_id === 1) {
-      products.products[i].category = "Apparel";
-    } else if (products.products[i].category_id === 2) {
-      products.products[i].category = "Furniture";
-    } else if (products.products[i].category_id === 3) {
-      products.products[i].category = "Household";
+    if (products[i].category_id === 1) {
+      products[i].category = "Apparel";
+    } else if (products[i].category_id === 2) {
+      products[i].category = "Furniture";
+    } else if (products[i].category_id === 3) {
+      products[i].category = "Household";
     }
 
 //assign to div with product name, department and price and html elements in place
-    itemsToPage += `<h3>${products.products[i].name}</h3><p>In the ${products.products[i].category} Department</p><p class="${products.products[i].category_id}">Price is: <span class="price">${products.products[i].price}</span></p>`;
+    itemsToPage += `<h3>${products[i].name}</h3><p>In the ${products[i].category} Department</p><p class="${products[i].category_id}">Price is: <span class="price">${products[i].price}</span></p>`;
 }  //post to page
    divForItems.innerHTML = itemsToPage;
 
@@ -54,13 +54,13 @@ var getSales = function (e) {
 //aquire list of products by way of products.json page loading (trigger by file load completion)
 var storeProducts = new XMLHttpRequest();
 storeProducts.addEventListener("load", getProducts);
-storeProducts.open("GET", "products.json");
+storeProducts.open("GET", "https://seasonalsalessb.firebaseio.com/folder2/products.json");
 storeProducts.send();
 
 // aquire seasonal discount by way of categories.json page loading (trigger by file load completion)
 var storeCat = new XMLHttpRequest();
 storeCat.addEventListener("load", getSales);
-storeCat.open("GET", "categories.json");
+storeCat.open("GET", "https://seasonalsalessb.firebaseio.com/folder/categories.json");
 storeCat.send();
 console.log(storeCat);
 
@@ -69,9 +69,9 @@ console.log(storeCat);
 var changePrice = function () {
   for (var i = 0; i < 3; i++) {
     //if the product's class matches the currently selected season
-    if (document.getElementById("seasons").value === salesData.categories[i].season_discount) {
+    if (document.getElementById("seasons").value === salesData[i].season_discount) {
       //the currently selected season class
-      var currentClass = salesData.categories[i].id;
+      var currentClass = salesData[i].id;
       //selects all prices with that class name and creates an array of those paragraphs with the current class
       var whichClass =  document.getElementsByClassName(currentClass);
       //cycles through all of the paragraphs with the current class and does the following:
@@ -79,7 +79,7 @@ var changePrice = function () {
         // gather that price (which is housed inside of a span)
         var price = parseFloat(whichClass[j].getElementsByTagName("span")[0].innerHTML);
         //applies the discount to the price
-        var newPrice = price * (1 - (parseFloat(salesData.categories[i].discount)));
+        var newPrice = price * (1 - (parseFloat(salesData[i].discount)));
         //rounds new price to the nearest cent
         newPrice = Math.round(newPrice * 100) / 100;
         //replaces old price on page with the new price
