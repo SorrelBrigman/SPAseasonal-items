@@ -11,12 +11,13 @@
 
 var divForItems = document.getElementById("listOfItems");
 var itemsToPage = "";
+var products;
 
 
 
-//function to parse JOSN data for items
-var getProducts = function (e) {
-  var products = JSON.parse(e.target.responseText);
+
+
+var loadProducts = function () {
   for (var i = 0; i < products.products.length; i++) {
     //assigns appropriate department
     if (products.products[i].category_id === 1) {
@@ -26,15 +27,23 @@ var getProducts = function (e) {
     } else if (products.products[i].category_id === 3) {
       products.products[i].category = "Household";
     }
+
+
+
+
 //assign to div with product name, department and price and html elements in place
     itemsToPage += `<h3>${products.products[i].name}</h3><p>In the ${products.products[i].category} Department</p><p class="${products.products[i].category_id}">Price is: <span class="price">${products.products[i].price}</span></p>`;
-  }
-  //post to page
+}  //post to page
    divForItems.innerHTML = itemsToPage;
 
 }
 
-
+//function to parse JSON data for items and load into variable on page
+var getProducts = function (e) {
+  products = JSON.parse(e.target.responseText);
+  //loads jSON list of data to page
+  loadProducts();
+}
 
 
 //aquire list of products by way of products.json page loading (trigger by file load completion)
